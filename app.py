@@ -14,7 +14,7 @@ st.title("📝 TẠO ĐỀ THI THÔNG MINH")
 if MY_API_KEY and MY_API_KEY != "DÁN_MÃ_AIZA_CỦA_BẠN_VÀO_ĐÂY":
     try:
         genai.configure(api_key=MY_API_KEY)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-pro')
         
         mon = st.text_input("1. Tên môn học:", "Lịch sử")
         noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=250)
