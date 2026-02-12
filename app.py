@@ -5,13 +5,13 @@ from io import BytesIO
 
 # --- CẤU HÌNH ---
 # Bạn dán mã API của bạn vào giữa hai dấu ngoặc kép ở dưới nhé
-MY_API_KEY = "AIzaSyC_TED5HV8YSeu7_2K3pQRwRUubzyBZFDI"
+MY_API_KEY = "AIzaSyCzZSmLqnuZk7YatKmjp_slcs2cJHijirw"
 
 st.set_page_config(page_title="Máy Tạo Đề AI", layout="centered")
 st.title("📝 TẠO ĐỀ THI THÔNG MINH")
 
 # Tự động kết nối bằng mã đã dán sẵn
-if MY_API_KEY and MY_API_KEY != "AIzaSyC_TED5HV8YSeu7_2K3pQRwRUubzyBZFDI":
+if MY_API_KEY and MY_API_KEY != "DÁN_MÃ_AIZA_CỦA_BẠN_VÀO_ĐÂY":
     try:
         genai.configure(api_key=MY_API_KEY)
         model = genai.GenerativeModel('gemini-1.5-flash')
