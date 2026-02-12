@@ -13,7 +13,7 @@ if MY_API_KEY:
     try:
         genai.configure(api_key=MY_API_KEY)
         # Sử dụng model gemini-1.5-pro để ổn định nhất
-        model = genai.GenerativeModel('gemini-1.5-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
         
         mon = st.text_input("1. Tên môn học:", "Lịch sử")
         noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=250)
