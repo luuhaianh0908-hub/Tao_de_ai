@@ -4,7 +4,7 @@ from docx import Document
 from io import BytesIO
 
 # --- CẤU HÌNH ---
-MY_API_KEY = "AIzaSyCzZSmLqnuZk7YatKmjp_slcs2cJHijirw"
+MY_API_KEY = "AIzaSyC-dTu1DFSq73ibkohji-au0oEDYfOduvk"
 
 st.set_page_config(page_title="Máy Tạo Đề AI", layout="centered")
 st.title("📝 TẠO ĐỀ THI THÔNG MINH")
@@ -13,7 +13,7 @@ if MY_API_KEY:
     try:
         genai.configure(api_key=MY_API_KEY)
         # Sử dụng bản pro ổn định nhất để tránh lỗi 404
-        model = genai.GenerativeModel('gemini-1.5-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         mon = st.text_input("1. Tên môn học:", "Lịch sử")
         noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=250)
