@@ -4,8 +4,7 @@ from docx import Document
 from io import BytesIO
 
 # --- CẤU HÌNH ---
-MY_API_KEY = "AIzaSyC-dTu1DFSq73ibkohji-au0oEDYfOduvk"
-
+MY_API_KEY = st.secrets["AIzaSyC-dTu1DFSq73ibkohji-au0oEDYfOduvk"]
 st.set_page_config(page_title="Máy Tạo Đề AI", layout="centered")
 st.title("📝 TẠO ĐỀ THI THÔNG MINH")
 
