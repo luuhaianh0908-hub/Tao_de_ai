@@ -7,7 +7,10 @@ from io import BytesIO
 if "GEMINI_API_KEY" in st.secrets:
     MY_API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=MY_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel(
+    model_name='gemini-1.5-flash'
+    )
+    
 else:
     st.error("Chưa cấu hình API Key trong phần Secrets của Streamlit!")
     st.stop()
@@ -26,7 +29,7 @@ if st.button("🔥 BẮT ĐẦU TẠO ĐỀ"):
         try:
             with st.spinner("AI đang tạo đề..."):
                 prompt = f"Tạo đề thi trắc nghiệm môn {mon} từ nội dung: {noidung}"
-                res = model.generate_content(prompt)
+                res = model.generate_content(prompt, request_options={"api_version": "v1"})
                 st.markdown(res.text)
         except Exception as e:
             st.error(f"Lỗi: {e}")
