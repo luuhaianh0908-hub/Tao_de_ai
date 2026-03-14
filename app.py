@@ -1,5 +1,5 @@
 import streamlit as st
-genai.configure(api_key="KEY_CỦA_BẠN")
+import google.generativeai as genai
 from docx import Document
 from io import BytesIO
 
