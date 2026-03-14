@@ -10,26 +10,24 @@ if "GEMINI_API_KEY" in st.secrets:
     model = genai.GenerativeModel('gemini-1.5-flash')
 else:
     st.error("Chưa cấu hình API Key trong phần Secrets của Streamlit!")
-    st.stop() # Dừng app nếu không có key
+    st.stop()
 
-        
-        mon = st.text_input("1. Tên môn học:", "Lịch sử")
-        noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=250)
-        
-        if st.button("🔥 BẮT ĐẦU TẠO ĐỀ"):
-            if not noidung:
-                st.warning("Bạn chưa dán nội dung bài học kìa!")
-            else:
-                with st.spinner("AI đang soạn đề, đợi tí nhé..."):
-                    res = model.generate_content(f"Tạo 10 câu trắc nghiệm từ nội dung này: {noidung}")
-                    st.markdown(res.text)
-                    
-                    doc = Document()
-                    doc.add_heading(f'ĐỀ THI MÔN: {mon.upper()}', 0)
-                    doc.add_paragraph(res.text)
-                    bio = BytesIO()
-                    doc.save(bio)
-                    st.download_button("📥 TẢI FILE WORD", bio.getvalue(), f"De_{mon}.docx")
-    except Exception as e:
-        st.error(f"Lỗi hệ thống: {e}")
-        
+# --- GIAO DIỆN (Tất cả dòng dưới đây phải sát lề trái, không có dấu cách ở đầu) ---
+st.set_page_config(page_title="Máy Tạo Đề")
+st.title("📝 TẠO ĐỀ THI THÔNG MINH")
+
+mon = st.text_input("1. Tên môn học:")
+noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=200)
+
+if st.button("🔥 BẮT ĐẦU TẠO ĐỀ"):
+    if not noidung:
+        st.warning("Bạn chưa nhập nội dung!")
+    else:
+        try:
+            with st.spinner("AI đang tạo đề..."):
+                prompt = f"Tạo đề thi trắc nghiệm môn {mon} từ nội dung: {noidung}"
+                res = model.generate_content(prompt)
+                st.markdown(res.text)
+        except Exception as e:
+            st.error(f"Lỗi: {e}")
+            
