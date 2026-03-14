@@ -1,31 +1,31 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. Lấy API Key từ Secrets
+# --- CẤU HÌNH ---
 if "GEMINI_API_KEY" in st.secrets:
     api_key = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=api_key)
-    # Ép dùng đúng tên model chính thức
+    
+    # ĐÂY LÀ CÁCH ÉP V1 CHUẨN NHẤT:
+    genai.configure(
+        api_key=api_key,
+        client_options={'api_version': 'v1'}
+    )
+    
     model = genai.GenerativeModel('gemini-1.5-flash')
 else:
-    st.error("Lỗi: Chưa dán API Key vào mục Secrets!")
+    st.error("Chưa cấu hình API Key!")
     st.stop()
 
-# 2. Giao diện đơn giản
-st.title("📝 MÁY TẠO ĐỀ THI")
-
+# --- GIAO DIỆN ---
+st.title("📝 MÁY TẠO ĐỀ")
 mon = st.text_input("Tên môn học:")
-noidung = st.text_area("Nội dung bài học:", height=200)
+noidung = st.text_area("Nội dung bài học:")
 
-if st.button("BẮT ĐẦU TẠO ĐỀ"):
-    if not noidung:
-        st.warning("Vui lòng nhập nội dung!")
-    else:
-        try:
-            with st.spinner("Đang xử lý..."):
-                # Gửi yêu cầu đơn giản
-                response = model.generate_content(f"Tạo 5 câu hỏi trắc nghiệm môn {mon}: {noidung}")
-                st.markdown(response.text)
-        except Exception as e:
-            st.error(f"Lỗi hệ thống: {e}")
-            
+if st.button("🔥 TẠO ĐỀ"):
+    try:
+        # Gọi lệnh tạo nội dung (không thêm gì ở đây nữa để tránh lỗi)
+        res = model.generate_content(f"Tạo đề thi môn {mon}: {noidung}")
+        st.markdown(res.text)
+    except Exception as e:
+        st.error(f"Lỗi: {e}")
+        
