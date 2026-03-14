@@ -1,34 +1,75 @@
 import streamlit as st
 import google.generativeai as genai
-from docx import Document
-from io import BytesIO
 
-# --- CẤU HÌNH ---
-if "GEMINI_API_KEY" in st.secrets:
-    MY_API_KEY = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=MY_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
-else:
-    st.error("Chưa cấu hình API Key trong phần Secrets của Streamlit!")
+st.set_page_config(page_title="Tạo đề thi AI", page_icon="📚")
+
+st.title("📚 Ứng dụng tạo đề thi bằng AI")
+
+# lấy API key
+api_key = st.secrets.get("API_KEY")
+
+if not api_key:
+    st.error("Chưa có API KEY trong secrets.")
     st.stop()
 
-# --- GIAO DIỆN (Tất cả dòng dưới đây phải sát lề trái, không có dấu cách ở đầu) ---
-st.set_page_config(page_title="Máy Tạo Đề")
-st.title("📝 TẠO ĐỀ THI THÔNG MINH")
+genai.configure(api_key=api_key)
 
-mon = st.text_input("1. Tên môn học:")
-noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=200)
+# nhập dữ liệu
+mon_hoc = st.text_input("Tên môn học")
 
-if st.button("🔥 BẮT ĐẦU TẠO ĐỀ"):
-    if not noidung:
-        st.warning("Bạn chưa nhập nội dung!")
+muc_do = st.selectbox(
+    "Độ khó",
+    ["Dễ", "Trung bình", "Khó"]
+)
+
+so_cau = st.slider(
+    "Số câu hỏi",
+    5,
+    40,
+    10
+)
+
+noi_dung = st.text_area(
+    "Dán nội dung bài học vào đây",
+    height=200
+)
+
+if st.button("🚀 Tạo đề thi"):
+
+    if not mon_hoc or not noi_dung:
+        st.warning("Hãy nhập đầy đủ thông tin.")
     else:
-        try:
-            with st.spinner("AI đang tạo đề..."):
-                prompt = f"Tạo đề thi trắc nghiệm môn {mon} từ nội dung: {noidung}"
-                res = model.generate_content(prompt, request_options={"api_version": "v1"})
 
-                st.markdown(res.text)
+        prompt = f"""
+        Tạo đề kiểm tra môn {mon_hoc}
+
+        Độ khó: {muc_do}
+
+        Nội dung:
+        {noi_dung}
+
+        Yêu cầu:
+        - Tạo {so_cau} câu hỏi trắc nghiệm
+        - Mỗi câu có 4 đáp án A B C D
+        - Không giải thích
+        - Cuối đề ghi bảng đáp án
+        """
+
+        try:
+
+            model = genai.GenerativeModel("gemini-pro")
+
+            response = model.generate_content(prompt)
+
+            st.subheader("📄 Đề thi")
+
+            st.write(response.text)
+
+            st.download_button(
+                "📥 Tải đề thi",
+                response.text,
+                file_name="de_thi.txt"
+            )
+
         except Exception as e:
-            st.error(f"Lỗi: {e}")
-            
+            st.error(e)
