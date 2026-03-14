@@ -4,18 +4,17 @@ from docx import Document
 from io import BytesIO
 
 # --- CẤU HÌNH ---
+# Dùng đúng tên biến để khớp với Secrets
 if "GEMINI_API_KEY" in st.secrets:
-    MY_API_KEY = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=MY_API_KEY)
-    model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash'
-    )
-    
+    api_key = st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=api_key)
+    # Khai báo model đơn giản nhất để hệ thống tự chọn v1
+    model = genai.GenerativeModel('gemini-1.5-flash')
 else:
     st.error("Chưa cấu hình API Key trong phần Secrets của Streamlit!")
     st.stop()
 
-# --- GIAO DIỆN (Tất cả dòng dưới đây phải sát lề trái, không có dấu cách ở đầu) ---
+# --- GIAO DIỆN ---
 st.set_page_config(page_title="Máy Tạo Đề")
 st.title("📝 TẠO ĐỀ THI THÔNG MINH")
 
@@ -29,8 +28,8 @@ if st.button("🔥 BẮT ĐẦU TẠO ĐỀ"):
         try:
             with st.spinner("AI đang tạo đề..."):
                 prompt = f"Tạo đề thi trắc nghiệm môn {mon} từ nội dung: {noidung}"
+                # Gọi lệnh tạo nội dung đơn giản nhất
                 res = model.generate_content(prompt)
-                
                 st.markdown(res.text)
         except Exception as e:
             st.error(f"Lỗi: {e}")
