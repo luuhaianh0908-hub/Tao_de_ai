@@ -29,7 +29,8 @@ if st.button("🔥 BẮT ĐẦU TẠO ĐỀ"):
         try:
             with st.spinner("AI đang tạo đề..."):
                 prompt = f"Tạo đề thi trắc nghiệm môn {mon} từ nội dung: {noidung}"
-                res = model.generate_content(prompt, request_options={"api_version": "v1"})
+                res = model.generate_content(prompt)
+                
                 st.markdown(res.text)
         except Exception as e:
             st.error(f"Lỗi: {e}")
