@@ -4,17 +4,16 @@ import google.generativeai as genai
 st.title("📚 Tạo đề thi AI")
 
 # lấy API key từ secrets
-api_key = st.secrets["API_KEY"]
-genai.configure(api_key=api_key)
+genai.configure(api_key=st.secrets["API_KEY"])
 
 mon_hoc = st.text_input("Tên môn học")
 so_cau = st.slider("Số câu hỏi", 5, 20, 10)
 noi_dung = st.text_area("Nội dung bài học")
 
-if st.button("🚀 Tạo đề thi"):
+if st.button("Tạo đề thi"):
 
     if not mon_hoc or not noi_dung:
-        st.warning("Hãy nhập đầy đủ thông tin")
+        st.warning("Nhập đủ thông tin")
     else:
 
         prompt = f"""
@@ -23,7 +22,7 @@ từ nội dung sau:
 
 {noi_dung}
 
-Mỗi câu có 4 đáp án A B C D.
+Mỗi câu có 4 đáp án A B C D
 Cuối đề ghi đáp án.
 """
 
@@ -31,7 +30,6 @@ Cuối đề ghi đáp án.
             model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(prompt)
 
-            st.subheader("📄 Đề thi")
             st.write(response.text)
 
         except Exception as e:
