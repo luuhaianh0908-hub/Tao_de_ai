@@ -4,15 +4,14 @@ from docx import Document
 from io import BytesIO
 
 # --- CẤU HÌNH ---
-MY_API_KEY = st.secrets["MY_API_KEY"]
-st.set_page_config(page_title="Máy Tạo Đề AI", layout="centered")
-st.title("📝 TẠO ĐỀ THI THÔNG MINH")
+if "GEMINI_API_KEY" in st.secrets:
+    MY_API_KEY = st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=MY_API_KEY)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    st.error("Chưa cấu hình API Key trong phần Secrets của Streamlit!")
+    st.stop() # Dừng app nếu không có key
 
-if MY_API_KEY:
-    try:
-        genai.configure(api_key=MY_API_KEY)
-        # Sử dụng bản pro ổn định nhất để tránh lỗi 404
-        model = genai.GenerativeModel(model_name="gemini-1.5-flash") 
         
         mon = st.text_input("1. Tên môn học:", "Lịch sử")
         noidung = st.text_area("2. Dán nội dung bài học vào đây:", height=250)
