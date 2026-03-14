@@ -57,8 +57,7 @@ if st.button("🚀 Tạo đề thi"):
 
         try:
 
-            model = genai.GenerativeModel("gemini-pro")
-
+            model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(prompt)
 
             st.subheader("📄 Đề thi")
