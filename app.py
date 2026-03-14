@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 st.title("📚 Tạo đề thi AI")
 
-# lấy API key từ secrets
+# lấy API key
 genai.configure(api_key=st.secrets["API_KEY"])
 
 mon_hoc = st.text_input("Tên môn học")
@@ -18,12 +18,13 @@ if st.button("Tạo đề thi"):
 
         prompt = f"""
 Tạo {so_cau} câu hỏi trắc nghiệm môn {mon_hoc}
-từ nội dung sau:
 
+Nội dung:
 {noi_dung}
 
-Mỗi câu có 4 đáp án A B C D
-Cuối đề ghi đáp án.
+Yêu cầu:
+- mỗi câu có 4 đáp án A B C D
+- cuối đề ghi đáp án
 """
 
         try:
