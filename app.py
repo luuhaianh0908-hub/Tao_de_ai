@@ -3,29 +3,24 @@ import google.generativeai as genai
 
 st.set_page_config(page_title="Tạo đề thi AI", page_icon="📚")
 
-st.title("📚 Ứng dụng tạo đề thi bằng AI")
+st.title("📚 Tạo đề thi tự động bằng AI")
 
-# lấy API key
+# Lấy API key
 api_key = st.secrets.get("API_KEY")
 
 if not api_key:
-    st.error("Chưa có API KEY trong secrets.")
+    st.error("Chưa có API KEY. Hãy thêm vào secrets.")
     st.stop()
 
 genai.configure(api_key=api_key)
 
-# nhập dữ liệu
+# Nhập dữ liệu
 mon_hoc = st.text_input("Tên môn học")
-
-muc_do = st.selectbox(
-    "Độ khó",
-    ["Dễ", "Trung bình", "Khó"]
-)
 
 so_cau = st.slider(
     "Số câu hỏi",
     5,
-    40,
+    30,
     10
 )
 
@@ -34,6 +29,7 @@ noi_dung = st.text_area(
     height=200
 )
 
+# Nút tạo đề
 if st.button("🚀 Tạo đề thi"):
 
     if not mon_hoc or not noi_dung:
@@ -41,26 +37,25 @@ if st.button("🚀 Tạo đề thi"):
     else:
 
         prompt = f"""
-        Tạo đề kiểm tra môn {mon_hoc}
+Tạo đề kiểm tra môn {mon_hoc}
 
-        Độ khó: {muc_do}
+Nội dung bài học:
+{noi_dung}
 
-        Nội dung:
-        {noi_dung}
-
-        Yêu cầu:
-        - Tạo {so_cau} câu hỏi trắc nghiệm
-        - Mỗi câu có 4 đáp án A B C D
-        - Không giải thích
-        - Cuối đề ghi bảng đáp án
-        """
+Yêu cầu:
+- Tạo {so_cau} câu hỏi trắc nghiệm
+- 4 đáp án A B C D
+- Không giải thích
+- Cuối đề ghi đáp án
+"""
 
         try:
 
             model = genai.GenerativeModel("gemini-1.5-flash-latest")
-response = model.generate_content(prompt)
 
-            st.subheader("📄 Đề thi")
+            response = model.generate_content(prompt)
+
+            st.subheader("📄 Đề thi được tạo")
 
             st.write(response.text)
 
@@ -71,4 +66,4 @@ response = model.generate_content(prompt)
             )
 
         except Exception as e:
-            st.error(e)
+            st.error(f"Lỗi: {e}")
